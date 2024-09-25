@@ -1,4 +1,4 @@
-package com.it.mowitnow;
+package com.it.mowitnow.model;
 
 import org.springframework.util.Assert;
 
