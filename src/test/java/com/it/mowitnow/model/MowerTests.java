@@ -19,7 +19,7 @@ public class MowerTests {
         //When
         Mower mower = new Mower(position, direction);
         //Then
-        assertThat(mower).extracting(Mower::position, Mower::direction)
+        assertThat(mower).extracting(Mower::getPosition, Mower::getPosition)
                 .containsExactly(position, direction);
     }
 
@@ -35,7 +35,7 @@ public class MowerTests {
                     Position position = new Position(x, y);
 
                     //When
-                    Mower mower = new Mower(position, direction);
+                    new Mower(position, direction);
                 }
         );
     }
