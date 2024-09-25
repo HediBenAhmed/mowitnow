@@ -9,6 +9,7 @@ import com.it.mowitnow.model.MowerCommand;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
+import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +24,7 @@ public class MowItNowJobConfig {
                            Step executeMowerCommandsStep,
                            JobRepository jobRepository) {
         return new JobBuilder("mowItNowJob", jobRepository)
+                .incrementer(new RunIdIncrementer())
                 .start(setLawnDimensionsStep)
                 .next(executeMowerCommandsStep)
                 .build();

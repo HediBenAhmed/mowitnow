@@ -14,6 +14,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.ResourceLoader;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,6 +34,7 @@ public class ExecuteMowerCommandsStepTest {
         //When
         var jobExecution = jobLauncherTestUtils.launchStep("executeMowerCommandsStep",
                 new JobParametersBuilder().addString("filePath", getFileAbsolutePath(filePath))
+                        .addDate("date", new Date())
                         .toJobParameters(),
                 new ExecutionContext(Map.of("lawnDimensions", new LawnDimensions(new Position(1, 1), new Position(5, 5))))
         );
