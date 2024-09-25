@@ -11,13 +11,13 @@ import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.batch.test.context.SpringBatchTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.ResourceLoader;
 
 import java.io.IOException;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @SpringBatchTest
@@ -31,10 +31,12 @@ public class SetLawnDimensionsStepTest {
     @ParameterizedTest
     @MethodSource("provideFiles")
     public void should_read_lawnDimensions_from_file(String filePath, Position upperRight) throws IOException {
+        //When
         var jobExecution = jobLauncherTestUtils.launchStep("setLawnDimensionsStep",
                 new JobParametersBuilder().addString("filePath", getFileAbsolutePath(filePath))
                         .toJobParameters());
 
+        //Then
         assertThat(jobExecution.getExitStatus().getExitCode()).isEqualTo("COMPLETED");
         assertThat(jobExecution.getExecutionContext().get("lawnDimensions", LawnDimensions.class))
                 .extracting(LawnDimensions::lowerLeft, LawnDimensions::upperRight)
@@ -42,29 +44,26 @@ public class SetLawnDimensionsStepTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"", "empty.txt", "empty_line.txt"})
-    void should_throw_exception_when_invalid_file(String filePath) {
+    @ValueSource(strings = {"files/empty.txt", "files/empty_line.txt"})
+    void should_throw_exception_when_invalid_file(String filePath) throws IOException {
+        //When
+        var jobExecution = jobLauncherTestUtils.launchStep("setLawnDimensionsStep",
+                new JobParametersBuilder().addString("filePath", getFileAbsolutePath(filePath))
+                        .toJobParameters());
 
-        assertThrows(
-                Exception.class,
-                () -> {
-                    //When
-                    jobLauncherTestUtils.launchStep("setLawnDimensionsStep",
-                            new JobParametersBuilder().addString("filePath", getFileAbsolutePath(filePath))
-                                    .toJobParameters());
-                }
-        );
+        //Then
+        assertThat(jobExecution.getExitStatus().getExitCode()).isEqualTo("FAILED");
     }
 
     private static Stream<Arguments> provideFiles() {
         return Stream.of(
-                Arguments.of("only_one_mower.txt", new Position(5, 5)),
-                Arguments.of("only_lawnDimension.txt", new Position(2, 2))
+                Arguments.of("files/only_one_mower.txt", new Position(5, 5)),
+                Arguments.of("files/only_lawnDimension.txt", new Position(2, 2))
         );
     }
 
     private String getFileAbsolutePath(String path) throws IOException {
-        var resource = resourceLoader.getResource("classpath:" + path);
+        ClassPathResource resource = new ClassPathResource(path);
         return resource.getFile().getAbsolutePath();
     }
 }

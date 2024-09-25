@@ -19,7 +19,7 @@ public class MowerTests {
         //When
         Mower mower = new Mower(position, direction);
         //Then
-        assertThat(mower).extracting(Mower::getPosition, Mower::getPosition)
+        assertThat(mower).extracting(Mower::getPosition, Mower::getDirection)
                 .containsExactly(position, direction);
     }
 

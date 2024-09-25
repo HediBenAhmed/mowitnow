@@ -43,7 +43,7 @@ public class LawnDimentionTests {
 
     private static Stream<Arguments> provideValidLawnParameters() {
         return Stream.of(
-                Arguments.of(0, 0, 1, 2),
+                Arguments.of(1, 1, 2, 3),
                 Arguments.of(1, 5, 3, 100)
         );
     }

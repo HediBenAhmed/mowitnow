@@ -2,7 +2,9 @@ package com.it.mowitnow.model;
 
 import org.springframework.util.Assert;
 
-public record LawnDimensions(Position lowerLeft, Position upperRight) {
+import java.io.Serializable;
+
+public record LawnDimensions(Position lowerLeft, Position upperRight) implements Serializable {
     public LawnDimensions {
         Assert.notNull(lowerLeft, "position lowerLeft cannot be null");
         Assert.notNull(upperRight, "position upperRight cannot be null");
