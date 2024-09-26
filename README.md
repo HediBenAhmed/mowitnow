@@ -41,3 +41,24 @@ On attend le résultat suivant (position finale des tondeuses) :
 5 1 E
 
 NB: Les données en entrée sont injectées sous forme de fichier.
+
+## Build
+Ceci est un projet Maven. Il suffit d'executer la commande suivante pour créer le package:
+```
+mvn clean package
+```
+Le package est un fichier .jar
+Pour créer l'image docker:
+```
+docker build -t mower-it-now:0.0.1 .
+```
+
+## Docker test
+Il suffit d'exécuter la commande suivante:
+```
+docker run -it -v /directory:/directory mower-it-now:0.0.1 filePath="/directoryinput.txt"
+```
+* "/directoryinput.txt" est le chemain du fichier à traiter
+* -v /directory:/directory est optionnel. utilisé seulement si besoin d'acceder à un repartoir sur la machine locale
+docker run -it -v /home/hedi:/home/hedi mower-it-now:0.0.1 filePath="/home/hedi/input.txt"
+* Le résultat est affiché sur la console. il est important de garder les parametres -it pour voir le résultat.
