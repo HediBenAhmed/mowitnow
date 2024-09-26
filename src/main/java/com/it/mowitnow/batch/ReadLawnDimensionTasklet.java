@@ -9,6 +9,7 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,6 +24,7 @@ public class ReadLawnDimensionTasklet implements Tasklet {
 
     public ReadLawnDimensionTasklet(@Value("#{jobParameters['filePath']}") String filePath,
                                     LawnDimensionsMapper lawnDimensionsMapper) {
+        Assert.notNull(filePath, "the argument filePath is mandatory");
         this.filePath = filePath;
         this.lawnDimensionsMapper = lawnDimensionsMapper;
     }
