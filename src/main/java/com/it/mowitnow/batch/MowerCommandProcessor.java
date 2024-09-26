@@ -9,6 +9,7 @@ import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 @Component
 @StepScope
@@ -24,6 +25,7 @@ public class MowerCommandProcessor implements ItemProcessor<MowerCommand, Mower>
 
     @Override
     public Mower process(MowerCommand item) throws Exception {
+        Assert.notNull(item, "MowerCommand cannot be null");
         moveOperationService.execute(item, lawnDimension);
         return item.mower();
     }
