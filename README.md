@@ -62,3 +62,47 @@ docker run -it -v /directory:/directory mower-it-now:0.0.1 filePath="/directoryi
 * -v /directory:/directory est optionnel. utilisé seulement si besoin d'acceder à un repartoir sur la machine locale
 docker run -it -v /home/hedi:/home/hedi mower-it-now:0.0.1 filePath="/home/hedi/input.txt"
 * Le résultat est affiché sur la console. il est important de garder les parametres -it pour voir le résultat.
+
+## Déploiement
+Pourra se faire avec jenkins comme outils de CI/CD.
+Exemple de fichier jenkinsFile:
+```
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout GitHub repo') {
+            steps {
+                checkout scmGit(branches: [[name: '*/main']], extensions: []])
+            }
+        }
+        
+        stage('Build and Tag Docker Image') {
+            steps {
+                script {
+                    sh 'docker build . -t mow-it-now:${version}'
+                    sh 'docker tag hellodocker mow-it-now:${version}'
+                }
+            }
+        }
+        
+        stage('Push the Docker Image to DockerHUb') {
+            steps {
+                script {
+                    withCredentials([string(credentialsId: 'docker_hub', variable: 'docker_hub')]) {
+                    sh 'docker login -u username -p ${docker_hub}'}
+                    sh 'docker push mow-it-now:${version}'
+                }
+            }
+        }
+        
+        stage('Deploy deployment and service file') {
+            steps {
+                script {
+                    kubernetesDeploy configs: ...
+                }
+            }
+        }
+    }
+}
+```
