@@ -64,7 +64,7 @@ docker run -it -v /home/hedi:/home/hedi mower-it-now:0.0.1 filePath="/home/hedi/
 * Le résultat est affiché sur la console. il est important de garder les parametres -it pour voir le résultat.
 
 ## Déploiement
-Pourra se faire avec jenkins comme outils de CI/CD.
+Pourrai se faire avec jenkins comme outil de CI/CD.
 Exemple de fichier jenkinsFile:
 ```
 pipeline {
